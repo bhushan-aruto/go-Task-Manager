@@ -7,4 +7,5 @@ type TaskRepository interface {
 	GetTaskById(id string) (*entity.Task, error)
 	UpdateTask(task *entity.Task) error
 	DeleteTaskById(id string) error
+	ListByUser(userId string) ([]*entity.Task, error)
 }
