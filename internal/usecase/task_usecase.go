@@ -65,7 +65,7 @@ func (u *TaskUsecase) UpdateTask(task *entity.Task) error {
 		return errors.New("description is required")
 	}
 
-	task.UpdatedAt = time.Now()
+	task.UpdatedAt = time.Now().UTC()
 
 	if err := u.database.UpdateTask(task); err != nil {
 		return fmt.Errorf("failed to update task: %w", err)

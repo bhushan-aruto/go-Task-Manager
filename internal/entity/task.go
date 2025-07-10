@@ -23,7 +23,7 @@ func NewTask(userId, title, description string) *Task {
 		Title:       title,
 		Description: description,
 		Completed:   false,
-		CreatedAt:   time.Now(),
-		UpdatedAt:   time.Now(),
+		CreatedAt:   time.Now().UTC(),
+		UpdatedAt:   time.Now().UTC(),
 	}
 }

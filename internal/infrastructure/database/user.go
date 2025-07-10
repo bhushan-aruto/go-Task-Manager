@@ -6,24 +6,33 @@ import (
 	"time"
 
 	"github.com/bhushan-aruto/go-task-manager/internal/entity"
+	"github.com/bhushan-aruto/go-task-manager/internal/repository"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-func (db *MongoDatabase) Create(user *entity.User) error {
+type userRepo struct {
+	db *MongoDatabase
+}
+
+func NewUserRepo(db *MongoDatabase) repository.UserRepository {
+	return &userRepo{db: db}
+}
+
+func (r *userRepo) Create(user *entity.User) error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 
-	collection := db.Collection("user")
+	collection := r.db.Collection("user")
 	_, err := collection.InsertOne(ctx, user)
 	return err
 }
 
-func (db *MongoDatabase) FindByEmail(email string) (*entity.User, error) {
+func (r *userRepo) FindByEmail(email string) (*entity.User, error) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 
-	collection := db.Collection("user")
+	collection := r.db.Collection("user")
 	var user entity.User
 	err := collection.FindOne(ctx, bson.M{"email": email}).Decode(&user)
 	if err != nil {

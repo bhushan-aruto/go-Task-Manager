@@ -20,11 +20,13 @@ func NewUserHandler(u *usecase.UserUsecase) *UserHandler {
 
 func (h *UserHandler) Register(c echo.Context) error {
 	var req model.RegisterRequest
+
 	if err := c.Bind(&req); err != nil {
 		return c.JSON(http.StatusBadRequest, echo.Map{"error": "invalid request"})
 	}
 
 	user := &entity.User{
+		UserName: req.UserName,
 		Email:    req.Email,
 		Password: req.Password,
 	}

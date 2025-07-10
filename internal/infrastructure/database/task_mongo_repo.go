@@ -7,6 +7,7 @@ import (
 
 	"github.com/bhushan-aruto/go-task-manager/internal/entity"
 	"github.com/bhushan-aruto/go-task-manager/internal/repository"
+
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -64,7 +65,7 @@ func (r *taskRepo) UpdateTask(task *entity.Task) error {
 		"title":       task.Title,
 		"description": task.Description,
 		"Completed":   task.Completed,
-		"updated_at":  time.Now(),
+		"updated_at":  time.Now().UTC(),
 	}}
 
 	_, err := collection.UpdateOne(ctx, filter, update)

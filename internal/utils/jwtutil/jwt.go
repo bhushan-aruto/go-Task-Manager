@@ -3,6 +3,7 @@ package jwtutil
 import (
 	"errors"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -22,15 +23,31 @@ func GenerateJWT(userID string) (string, error) {
 }
 
 func ExtractUserID(c echo.Context) (string, error) {
-	user := c.Get("user")
-	if user == nil {
-		return "", errors.New("user not found in context")
+	authHeader := c.Request().Header.Get("Authorization")
+	if authHeader == "" {
+		return "", errors.New("missing auth header")
 	}
-	token := user.(*jwt.Token)
-	claims := token.Claims.(jwt.MapClaims)
-	userID, ok := claims["user_id"].(string)
-	if !ok {
+
+	parts := strings.Split(authHeader, " ")
+	if len(parts) != 2 || parts[0] != "Bearer" {
+		return "", errors.New("invalid auth header format")
+	}
+
+	tokenStr := parts[1]
+
+	claims := jwt.MapClaims{}
+	token, err := jwt.ParseWithClaims(tokenStr, claims, func(token *jwt.Token) (interface{}, error) {
+		return jwtSecret, nil
+	})
+
+	if err != nil || !token.Valid {
 		return "", errors.New("invalid token")
 	}
-	return userID, nil
+
+	userId, ok := claims["user_id"].(string)
+	if !ok {
+		return "", errors.New("user_id not found in token")
+	}
+
+	return userId, nil
 }

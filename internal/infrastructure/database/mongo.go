@@ -15,7 +15,7 @@ type MongoDatabase struct {
 	database *mongo.Database
 }
 
-func Newdatabase(cfg *config.Config) *MongoDatabase {
+func ConnecttoMOngo(cfg *config.Config) *MongoDatabase {
 	ctx, cancle := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancle()
 

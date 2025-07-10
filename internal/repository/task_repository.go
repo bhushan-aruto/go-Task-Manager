@@ -1,6 +1,8 @@
 package repository
 
-import "github.com/bhushan-aruto/go-task-manager/internal/entity"
+import (
+	"github.com/bhushan-aruto/go-task-manager/internal/entity"
+)
 
 type TaskRepository interface {
 	Creat(task *entity.Task) error

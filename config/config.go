@@ -28,7 +28,7 @@ func LoadConfig() *Config {
 	return &Config{
 
 		DatabaseUrl:  getEnv("DATABASE_URL"),
-		ServerAdres:  getEnv("SERVER_ADDRRESS"),
+		ServerAdres:  getEnv("SERVER_ADDRESS"),
 		DatabaseName: getEnv("DATABASE_NAME"),
 	}
 
